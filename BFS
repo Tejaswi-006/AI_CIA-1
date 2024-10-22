@@ -1,0 +1,37 @@
+from collections import deque
+
+# Define the Graph
+network = {
+    'Source': ['Alpha', 'Beta'],
+    'Alpha': ['Beta', 'Delta'],
+    'Beta': ['Gamma', 'Alpha'],
+    'Gamma': ['Epsilon'],
+    'Delta': ['Goal'],
+    'Epsilon': [],   
+    'Goal': []    
+}
+
+def bfs_traverse(network, start_node, target_node):
+    explored_nodes = set()  
+    search_queue = deque([(start_node, [start_node])])
+    
+    while search_queue:
+        current_node, current_path = search_queue.popleft()
+        print(f"Currently exploring: {current_node}")
+
+        if current_node == target_node:
+            print(f"Target node {target_node} reached!")
+            print("Traversal Path:", " -> ".join(current_path))
+            return True  
+
+        if current_node not in explored_nodes:
+            explored_nodes.add(current_node)  
+
+            for neighbor_node in network[current_node]:
+                if neighbor_node not in explored_nodes:
+                    search_queue.append((neighbor_node, current_path + [neighbor_node])) 
+    
+    print("Target node not found")
+    return False 
+
+bfs_traverse(network, 'Source', 'Goal')
